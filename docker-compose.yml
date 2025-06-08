@@ -1,0 +1,108 @@
+version: "3.8"
+
+services:
+  # RabbitMQ service
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"  # RabbitMQ management UI
+    networks:
+      - app-network
+
+  # API Gateway service
+  api-gateway:
+    build:
+      context: ./backend/api-gateway
+    ports:
+      - "3003:3003"
+    environment:
+      - RABBITMQ_URL=amqps://pramjymf:Xq0obxHBwGTC2geTipDn_TgarpU6IGOI@woodpecker.rmq.cloudamqp.com/pramjymf
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  # Products service
+  products:
+    build:
+      context: ./backend/product
+    ports:
+      - "3001:3001"
+    environment:
+      - RABBITMQ_URL=amqps://pramjymf:Xq0obxHBwGTC2geTipDn_TgarpU6IGOI@woodpecker.rmq.cloudamqp.com/pramjymf
+      - MONGODB_AUTH_URI=mongodb+srv://22bcs129:authpassword@cluster0.mi8qux4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=some_super_secret_key_123
+      - MONGODB_PRODUCT_URI=mongodb+srv://22bcs129:productpassword@cluster0.zsyjwtj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  # Auth service
+  auth:
+    build:
+      context: ./backend/auth
+    ports:
+      - "3000:3000"
+    environment:
+      - RABBITMQ_URL=amqps://pramjymf:Xq0obxHBwGTC2geTipDn_TgarpU6IGOI@woodpecker.rmq.cloudamqp.com/pramjymf
+      - MONGODB_AUTH_URI=mongodb+srv://22bcs129:authpassword@cluster0.mi8qux4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=some_super_secret_key_123
+      - USER_EMAIL =22bcs129@iiitdwd.ac.in
+      - PASSWORD =123456789
+      - FACEBOOK_CLIENT_ID=" "
+      - FACEBOOK_CLIENT_SECRET=" "
+      - FACEBOOK_CALLBACK_URL=http://auth:3000/auth/facebook/callback
+
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  # Orders service
+  orders:
+    build:
+      context: ./backend/order
+    ports:
+      - "3002:3002"
+    environment:
+      - RABBITMQ_URL=amqps://pramjymf:Xq0obxHBwGTC2geTipDn_TgarpU6IGOI@woodpecker.rmq.cloudamqp.com/pramjymf
+      - MONGODB_AUTH_URI=mongodb+srv://22bcs129:authpassword@cluster0.mi8qux4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - JWT_SECRET=some_super_secret_key_123order_secret
+      - MONGODB_PRODUCT_URI=mongodb+srv://22bcs129:productpassword@cluster0.zsyjwtj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - MONGODB_ORDER_URI=mongodb+srv://22bcs129:productpassword@cluster0.zsyjwtj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+
+  # Frontend (User-facing) service
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL = 'http://localhost:3003'
+    depends_on:
+      - api-gateway
+    networks:
+      - app-network
+
+  # Admin (Admin-facing) service
+  admin:
+    build:
+      context: ./admin  # Separate folder for the Admin frontend
+    ports:
+      - "3030:3030"  # Admin frontend runs on port 3030
+    depends_on:
+      - api-gateway
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,128 @@
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Outfit&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Outfit', sans-serif; /* Default font */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.prata-regular {
+  font-family: 'Prata', serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+::-webkit-scrollbar {
+  width: 8px; /* Narrower scrollbar */
+  height: 8px; /* Narrower scrollbar for horizontal */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Light gray */
+  border-radius: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker gray when hovered */
+}
+
+a.active {
+  display: block;
+  background-color: #00bcd4; /* Light aquamarine for better contrast */
+  color: white;
+  border-radius: 4px;
+  padding: 6px 12px;
+  transition: all 0.3s ease-in-out;
+}
+
+a.active:hover {
+  background-color: #0097a7; /* Darker shade on hover */
+  transform: scale(1.05);
+}
+
+@media(max-width: 640px) {
+  a.active {
+    background-color: #00bcd4;
+    color: white;
+    padding: 8px 16px; /* Larger clickable area */
+  }
+}
+
+/* Toastify container customizations */
+.Toastify {
+  font-family: 'Prata', serif;
+  position: fixed !important;
+  z-index: 9999;
+  top: 20px;
+  right: 20px; /* Change to 'right' for a modern layout */
+  left: auto;
+  bottom: auto;
+  max-width: 300px; /* Restrict width for better toast visibility */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Toast customizations */
+.Toastify__toast {
+  background-color: #333;
+  color: white;
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-family: 'Prata', serif;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Toast visibility transition */
+.Toastify__toast--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Toastify error and success customization */
+.Toastify__toast--error {
+  background-color: #e74c3c;
+  border-left: 5px solid #c0392b;
+}
+
+.Toastify__toast--success {
+  background-color: #2ecc71;
+  border-left: 5px solid #27ae60;
+}
+
+/* Toast container responsiveness */
+.Toastify__toast-container {
+  top: 30px;
+  left: auto;
+  right: 20px; /* Right-aligned for modern layout */
+  max-width: 320px; /* Limiting width of the toast container */
+}
+
+.Toastify__toast-container--top-right {
+  top: 20px;
+  right: 20px;
+}
+
+.Toastify__toast-container--top-left {
+  top: 20px;
+  left: 20px;
+}
+
+.Toastify__toast-container--bottom-right {
+  bottom: 20px;
+  right: 20px;
+}
+
+.Toastify__toast-container--bottom-left {
+  bottom: 20px;
+  left: 20px;
+}
+
+
