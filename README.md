@@ -1,5 +1,5 @@
 # 🛒 Microservices-Based E-Commerce Platform
-
+    
 This project implements a scalable and modular **E-Commerce Web Application** using **Microservices Architecture**. Developed as part of the **Virtualization and Cloud Computing** course at **IIIT Dharwad**, it demonstrates best practices in containerization, service orchestration, and cloud-native development.
 
 ---
